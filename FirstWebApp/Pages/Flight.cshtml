@@ -1,0 +1,59 @@
+﻿@page
+@model FirstWebApp.Pages.FlightModel
+@{
+}
+
+// Models/Flight.cs
+public class Flight
+{
+    public int Id { get; set; }
+    public string Airline { get; set; }
+    public string Origin { get; set; }
+    public string Destination { get; set; }
+    public DateTime DepartureTime { get; set; }
+    public DateTime ArrivalTime { get; set; }
+}
+
+// Controllers/FlightsController.cs
+[ApiController]
+[Route("[controller]")]
+public class FlightsController : ControllerBase
+{
+    private static readonly List<Flight>
+    Flights = new List<Flight>
+        {
+        // Example data
+        new Flight{ Id = 1, Airline = "Airline1", Origin = "City1", Destination = "City2", DepartureTime = DateTime.Now, ArrivalTime = DateTime.Now.AddHours(2) },
+        };
+
+        // GET: api/Flights
+        [HttpGet]
+        public IEnumerable<Flight>
+            GetFlights()
+            {
+            return Flights;
+            }
+
+            // GET: api/Flights/5
+            [HttpGet("{id}")]
+            public ActionResult<Flight>
+                GetFlight(int id)
+                {
+                var flight = Flights.FirstOrDefault(f => f.Id == id);
+                if (flight == null)
+                {
+                return NotFound();
+                }
+                return flight;
+                }
+
+                // POST: api/Flights
+                [HttpPost]
+                public ActionResult<Flight>
+                    AddFlight(Flight flight)
+                    {
+                    flight.Id = Flights.Max(f => f.Id) + 1; // Generating new Id (replace this with a proper Id generation in production)
+                    Flights.Add(flight);
+                    return CreatedAtAction("GetFlight", new { id = flight.Id }, flight);
+                    }
+                    }
