@@ -19,6 +19,8 @@
     <button type="submit" class="btn btn-primary">Login</button>
 </form>
 
+<button class="btn btn-link" onclick="window.location.href='/ForgotPassword'">Forgot Password?</button>
+
 <script>
     document.getElementById('loginForm').addEventListener('submit', async function (e) {
         e.preventDefault();
@@ -42,7 +44,7 @@
             const data = await response.json();
             console.log('Login successful:', data);
             // Handle successful login here
-            
+
         } else {
             console.log('Login failed');
             // Handle login failure here

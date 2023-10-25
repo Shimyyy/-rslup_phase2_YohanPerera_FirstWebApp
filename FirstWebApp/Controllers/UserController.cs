@@ -33,6 +33,16 @@ namespace FirstWebApp.Controllers
             return Ok(new { user.Id, user.Username, user.Role, token });
         }
 
+        [HttpPost("forgot-password")]
+        public IActionResult ForgotPassword([FromBody] ForgotPasswordRequest request)
+        {
+            // In a real application, you would verify that the user exists, generate a password reset token, and send an email to the user with a link to reset their password.
+            // For now, we'll just log a message and return a dummy link.
+            var resetLink = "https://yourapp.com/reset-password?token=dummytoken";
+            Console.WriteLine($"Password reset link for {request.Email}: {resetLink}");
+            return Ok(new { Message = "Password reset link sent", ResetLink = resetLink });
+        }
+
         private string GenerateJwtToken(User user)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("your-secret-key-here"));
@@ -54,5 +64,10 @@ namespace FirstWebApp.Controllers
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+    }
+
+    public class ForgotPasswordRequest
+    {
+        public string? Email { get; set; }
     }
 }
