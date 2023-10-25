@@ -1,0 +1,53 @@
+﻿@page
+@model PrivacyModel
+@{
+    ViewData["Title"] = "Login Here!";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<h2>Login</h2>
+<form id="loginForm">
+    <div class="form-group">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required class="form-control">
+    </div>
+    <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required class="form-control">
+    </div>
+    <button type="submit" class="btn btn-primary">Login</button>
+</form>
+
+<script>
+    document.getElementById('loginForm').addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        console.log('Submitting form:', { username, password });
+
+        const response = await fetch('https://localhost:44359/api/user/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username, password }),
+        });
+
+        console.log('Response:', response);
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log('Login successful:', data);
+            // Handle successful login here
+            
+        } else {
+            console.log('Login failed');
+            // Handle login failure here
+            // Show an error message
+            document.getElementById('loginForm').insertAdjacentHTML('beforebegin', '<p class="error">Login failed. Please try again.</p>');
+        }
+    });
+</script>
